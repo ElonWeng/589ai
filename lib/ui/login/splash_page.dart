@@ -32,6 +32,8 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -70,7 +72,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              '其动图:',
+              '启动图:',
             ),
             Text(
               '$_counter',
