@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runtool/ui/login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key, required this.title});
@@ -19,17 +20,11 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  int _counter = 0;
 
   void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
   }
 
 
@@ -52,7 +47,7 @@ class _SplashPageState extends State<SplashPage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: const Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -71,12 +66,8 @@ class _SplashPageState extends State<SplashPage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              '启动图:',
-            ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              '启动图:',
             ),
           ],
         ),
