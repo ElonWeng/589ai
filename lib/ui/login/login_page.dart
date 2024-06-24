@@ -37,6 +37,12 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Email',
               ),
             ),
+            const TextField(
+              decoration: InputDecoration(
+                hintText: 'Enter your password to sign up for this app',
+                labelText: 'Password',
+              ),
+            ),
             const SizedBox(height: 16), // 垂直间距
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
