@@ -1,74 +1,376 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:runtool/base/util/log_util.dart';
 
-class DioManager {
-  static DioManager?_instance ;
-  static DioManager? getInstance() {
-    _instance ??= DioManager();
-    return _instance ;
+class DioManger {
+  static int connectTime = 15;
+  static String errMsg = '网络开小差～';
+  static String tokenErrMsg = '登录已过期，请重新登录～';
+  static String serverErrMsg = '服务开小差～';
+  static String host = '';//请求地址
+  static String port = '';
+  static String head = '';
+
+  /// global dio object
+  static Dio? dio;
+
+  static var options;
+
+  /// http request methods
+  static const String GET = 'get';
+  static const String POST = 'post';
+  static const String upPOST = 'upPOST';
+  static const String OAUTH = 'oauth';
+  static const String PATCH = 'patch';
+  static const String DELETE = 'delete';
+  static const String PUT = 'put';
+  static const String DELETE_BODY = 'deleteBody';
+
+  /// 创建 dio 实例对象
+  static Dio? createInstance(header) {
+    options = BaseOptions(
+        connectTimeout: Duration(microseconds: connectTime),
+        receiveTimeout: Duration(microseconds: connectTime),
+        responseType: ResponseType.json,
+        validateStatus: (status) {
+          return true;
+        },
+        // host: host,
+        headers: header);
+    dio = Dio(options);
+    return dio;
   }
 
-  Dio dio = Dio();
-  DioManager() {
-    dio.options.baseUrl = "https://www.baidu.com/" ;
-    dio.options.connectTimeout = 5000 as Duration? ;
-    dio.options.receiveTimeout = 3000 as Duration? ;
-    dio.interceptors.add(LogInterceptor(requestBody: true));
-    // dio.interceptors.add(CookieManager(CookieJar()));//缓存相关类，具体设置见https://github.com/flutterchina/cookie_jar
+  static void add(Dio dio) {
+    dio.interceptors.add(InterceptorsWrapper(onRequest: (RequestOptions options,
+        RequestInterceptorHandler requestInterceptorHandler) {
+      print(
+          "\n================================= 请求数据 =================================");
+      print("method = ${options.method.toString()}");
+      print("url = ${options.uri.toString()}");
+      print("headers = ${options.headers}");
+      print("queryParameters = ${options.queryParameters.toString()}");
+      print("data = ${options.data.toString()}");
+      print(
+          "================================= 请求数据结束 =================================\n");
+    }, onResponse: (Response response,
+        ResponseInterceptorHandler responseInterceptorHandler) {
+      print(
+          "\n================================= 响应数据开始 =================================");
+      print("code = ${response.statusCode}");
+      print("data = ${response.data}");
+      print(
+          "================================= 响应数据结束 =================================\n");
+    }, onError: (DioError e, ErrorInterceptorHandler errorInterceptorHandler) {
+      print(
+          "\n=================================错误响应数据 =================================");
+      print("type = ${e.type}");
+      print("message = ${e.message}");
+      print("stackTrace = ${e.stackTrace}");
+      print("\n");
+    }));
+    print('结束-----------------');
   }
 
-  //get请求
-  get(String url, FormData params, Function successCallBack,
-      Function errorCallBack) async {
-    _requestHttpMethod(url, successCallBack, 'get', params, errorCallBack);
+  /// 清空 dio 对象
+  static clear() {
+    dio = null;
   }
-  //post请求
-  post(String url, params, Function successCallBack,
-      Function errorCallBack) async {
-    _requestHttpMethod(url, successCallBack, "post", params, errorCallBack);
-  }
-  //post请求
-  postNoParams(
-      String url, Function successCallBack, Function errorCallBack) async {
-    _requestHttpMethod(url, successCallBack, "post", null, errorCallBack);
-  }
-  // 请求的主体
-  _requestHttpMethod(String url , Function successCallBack , [String? method , FormData? params , Function? errorCallBack]) async {
-    Response?response ;
+
+  static Future<Response> get(
+    String url, {
+    header,
+    FormData? formData,
+  }) async {
     try {
-      if (method == 'get') {
-        if (params != null) {
-          response = await dio.get(url,
-              queryParameters: Map.fromEntries(params.fields));
-        } else {
-          response = await dio.get(url);
-        }
-      } else if (method == 'post') {
-        if (params != null && params.fields.isNotEmpty) {
-          response = await dio.post(url, data: params);
-        } else {
-          response = await dio.post(url);
-        }
+      Response response;
+      Dio? dio = createInstance(header);
+      const bool inProduction = bool.fromEnvironment('dart.vm.product');
+      if (!inProduction) {
+        LogUtil.debug('get请求头部', header.toString());
+        LogUtil.debug('get请求地址', url.toString());
+        LogUtil.debug('get请求参数', formData.toString());
       }
-    } on DioError catch (error){
-      // 请求错误处理
-      _error(errorCallBack!, error.message as String);
-      return '';
+      if (formData != null) {
+        response = await dio!
+            .get(url, queryParameters: Map.fromEntries(formData.fields));
+      } else {
+        response = await dio!.get(url);
+      }
+      LogUtil.debug('get请求返回',url+ response.toString() + '     ' + response.statusCode.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------get请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
     }
+  }
 
-    String dataStr = json.encode(response!.data);
-    Map<String, dynamic> dataMap = json.decode(dataStr);
-    if (dataMap['status'] != 200) {
-      _error(errorCallBack!, dataMap['msg'].toString());
+  ///Post请求 application/json     JSON数据格式
+  static Future<Response> post(
+    String url, {
+    header,
+    paramMap,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      const bool inProduction = bool.fromEnvironment('dart.vm.product');
+      if (!inProduction) {
+        LogUtil.debug('post请求头部', header.toString());
+        LogUtil.debug('post请求地址', url.toString());
+        LogUtil.debug('post请求参数', paramMap.toString());
+      }
+      if (paramMap != null) {
+        response = await dio!.post(url, data: paramMap);
+      } else {
+        response = await dio!.post(url);
+      }
+      LogUtil.debug('post请求返回', url+ response.toString() + '     ' + response.statusCode.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------post请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+    }
+  }
+
+  static Future<Response> upPost(
+    String url, {
+    header,
+    formData,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      const bool inProduction = bool.fromEnvironment('dart.vm.product');
+      if (!inProduction) {
+        LogUtil.debug('upPost请求头部', header.toString());
+        LogUtil.debug('upPost请求地址', url.toString());
+        LogUtil.debug('upPost请求参数', formData.toString());
+      }
+      if (formData != null) {
+        response = await dio!.post(url, data: formData,
+            onSendProgress: (int progress, int total) {
+          print("当前进度是 $progress 总进度是 $total");
+        });
+      } else {
+        response = await dio!.post(url);
+      }
+      LogUtil.debug('upPost', response.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------upPost请求出错-------------', e.toString());
+      // return json.decode({"success": false, "errMsg": "响应超时"}.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+      return json.decode(e.toString());
+    }
+  }
+
+  static Future<Response> oauth<T>(
+    String url, {
+    header,
+    FormData? formData,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      // print('oauth请求地址：' + url);
+      // print('oauth请求参数：' + formData.toString());
+      const bool inProduction = bool.fromEnvironment('dart.vm.product');
+      if (!inProduction) {
+        LogUtil.debug('oauth请求头部', header.toString());
+        LogUtil.debug('oauth请求地址', url.toString());
+        LogUtil.debug('oauth请求参数', formData.toString());
+      }
+      if (formData != null) {
+        response = await dio!.post(url, data: formData);
+      } else {
+        response = await dio!.post(url);
+      }
+      LogUtil.debug('oauth', response.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------oauth请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+    }
+  }
+
+  static Future<Response> delete(
+    String url, {
+    header,
+    FormData? formData,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      // print('delete请求头部：' + header.toString());
+      // print('delete请求地址：' + url);
+      // print('delete请求参数：' + formData.toString());
+      if (formData != null) {
+        response = await dio!
+            .delete(url, queryParameters: Map.fromEntries(formData.fields));
+      } else {
+        response = await dio!.delete(url);
+      }
+      // LogUtil.debug('delete：', response.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------delete请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+    }
+  }
+
+  static Future<Response> deleteBody(
+    String url, {
+    header,
+    Object? formData,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      // print('delete请求头部：' + header.toString());
+      // print('delete请求地址：' + url);
+      // print('delete请求参数：' + formData.toString());
+      if (formData != null) {
+        response = await dio!.delete(url, data: formData);
+      } else {
+        response = await dio!.delete(url);
+      }
+      // LogUtil.debug('delete：', response.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------delete请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+    }
+  }
+
+  static Future<Response> put(
+    String url, {
+    header,
+    formData,
+  }) async {
+    try {
+      Response response;
+      Dio? dio = createInstance(header);
+      // print('put请求头部：' + header.toString());
+      // print('put请求地址：' + url);
+      const bool inProduction = bool.fromEnvironment('dart.vm.product');
+      if (!inProduction) {
+        LogUtil.debug('put请求地址', url);
+        LogUtil.debug('put请求参数', formData.toString());
+      }
+
+      if (formData != null) {
+        response = await dio!.put(url, data: formData);
+      } else {
+        response = await dio!.put(url);
+      }
+      // LogUtil.debug('put：', response.toString());
+      return response;
+    } catch (e) {
+      LogUtil.debug('-------------put请求出错-------------', e.toString());
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          statusCode: 500,
+          data: {'success': false, 'errMsg': errMsg});
+    }
+  }
+
+  static Future<Response> request(
+    String url, {
+    paramGet,
+    paramPost,
+    paramOauth,
+    paramDelete,
+    paramDeleteBody,
+    paramPut,
+    paramUpPost,
+    method,
+  }) async {
+    Response response;
+    if (method == DioManger.GET) {
+      response = await get(
+        host  + url,
+        formData: paramGet,
+        header: head,
+      );
+    } else if (method == DioManger.POST) {
+      response = await post(
+        host  + url,
+        paramMap: paramPost,
+        header: head,
+      );
+    } else if (method == DioManger.upPOST) {
+      response = await upPost(
+        host  + url,
+        formData: paramUpPost,
+        header: head,
+      );
+    } else if (method == DioManger.OAUTH) {
+      response = await oauth(
+        host  + url,
+        formData: paramOauth,
+        header: head,
+      );
+    } else if (method == DioManger.DELETE) {
+      response = await delete(
+        host  + url,
+        formData: paramDelete,
+        header: head,
+      );
+    } else if (method == DioManger.DELETE_BODY) {
+      response = await deleteBody(
+        host  + url,
+        formData: paramDeleteBody,
+        header: head,
+      );
+    } else if (method == DioManger.PUT) {
+      response = await put(
+        host  + url,
+        formData: paramPut,
+        header: head,
+      );
     } else {
-      successCallBack(dataMap);
+      response = await get(
+        url,
+        formData: paramGet,
+        header: head,
+      );
     }
-
+    //部分接口数据有问题
+    if (response.toString() == '') {
+      return Response(
+          requestOptions: RequestOptions(path: url),
+          data: {'success': false, 'errMsg': serverErrMsg});
+    } else {
+      LogUtil.debug('返回的状态码', response.statusCode.toString());
+      if (response.statusCode == 401) {
+        return Response(
+            requestOptions: RequestOptions(path: url),
+            data: {'success': false, 'errMsg': tokenErrMsg});
+      }
+    }
+    return response;
   }
 
-  // 请求错误返回
-  _error(Function errorCallBack, String error) {
-    errorCallBack(error);
-  }
+ 
 }
