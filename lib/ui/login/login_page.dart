@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:runtool/base/util/snackbar_util.dart';
 import 'package:runtool/ui/login/login_model.dart';
+
+import '../../base/util/check_util.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  LoginModel loginModel = LoginModel();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +51,10 @@ class _LoginPageState extends State<LoginPage> {
                     width: 1, // 设置边框宽度
                   ),
                 ),
-                child: const Center(
+                child:  Center(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
                       hintText: 'email@domain.com',
                       hintStyle: TextStyle(
                           fontWeight: FontWeight.normal, color: Colors.grey),
@@ -70,7 +77,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onTap: (){
-                  print('注册');
+                  if (loginModel.checkEmail(_emailController.text)) {
+                    SnackBarService.showSnackBar(context, '邮箱合法');
+                  }else{
+                    SnackBarService.showSnackBar(context, '请重新输入');
+                  }
                 },
               ),
               const SizedBox(height: 20), // 垂直间距
@@ -99,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           const SizedBox(width: 10),
                            Text(
-                            'Current Text: ${context.watch<LoginModel>().getText()}',
+                            context.watch<LoginModel>().getText(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, color: Colors.black,fontSize: 14),
                           ),
@@ -108,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onTap: (){
-                  context.read<LoginModel>().setText('New Text!');
+                  context.read<LoginModel>().setText('Loading...');
                 },
               ),
               const SizedBox(height: 20), // 垂直间距
@@ -121,5 +132,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 }
