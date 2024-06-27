@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runtool/base/config/language_text.dart';
 
 class LocalModel with ChangeNotifier {
   Locale _locale = const Locale('en', ''); // 默认语言
@@ -16,7 +17,7 @@ class LocalModel with ChangeNotifier {
     // 为了简单起见，我们直接返回硬编码的字符串
     switch (key) {
       case 'create':
-        return _locale.languageCode == 'en' ? 'Create an account' : '创建账号';
+        return _locale.languageCode == 'en' ? LanguageText.createEn : LanguageText.createZh;
       case 'emailTitle':
         return _locale.languageCode == 'en' ? 'Enter your email to sign up for this app' : '请输入邮箱账号来登录';
       case 'sighUp':
