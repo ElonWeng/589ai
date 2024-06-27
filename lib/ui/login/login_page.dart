@@ -1,7 +1,12 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
+import 'package:runtool/base/widget/local_text.dart';
 import 'package:runtool/ui/login/login_model.dart';
+import 'package:runtool/ui/login/privacypolicy_page.dart';
+import 'package:runtool/ui/login/serviceterms_page.dart';
 
 import '../../base/util/check_util.dart';
 
@@ -18,15 +23,33 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final languageModel = Provider.of<LocalModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text(''), // 根据需要自定义标题
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            InkWell(
+              child: Image.asset(
+                'assets/images/icon_internation.png',
+                width: 20,
+                height: 20,
+              ),
+              onTap: (){
+                languageModel.locale = languageModel.locale.languageCode == 'en'
+                    ? const Locale('zh', '') // 切换到中文
+                    : const Locale('en', ''); // 切换到英文
+              },
+            )
+          ],
+        ), // 根据需要自定义标题
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
+
               const Text(
                 '589.AI',
                 style: TextStyle(
@@ -35,11 +58,9 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 50), // 垂直间距
-              const Text('Create an account',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const LocalizedText(contentKey: 'create',textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               const SizedBox(height: 10), // 垂直间距
-              const Text('Enter your email to sign up for this app',
-                  style: TextStyle(color: Colors.black, fontSize: 16)),
+              const LocalizedText(contentKey: 'emailTitle', textStyle: TextStyle(color: Colors.black, fontSize: 16)),
               const SizedBox(height: 20), // 垂直间距
               /*email输入框*/
               Container(
@@ -73,14 +94,14 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.black,
                   ),
                   child: const Center(
-                    child: Text('Sign up with email',style: TextStyle(color: Colors.white),),
+                    child: LocalizedText(contentKey: 'sighUp', textStyle: TextStyle(color: Colors.white),),
                   ),
                 ),
                 onTap: (){
                   if (loginModel.checkEmail(_emailController.text)) {
-                    SnackBarService.showSnackBar(context, '邮箱合法');
+                    SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailValid'));
                   }else{
-                    SnackBarService.showSnackBar(context, '请重新输入');
+                    SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailInput'));
                   }
                 },
               ),
@@ -88,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('or continue with'),
+                  LocalizedText(contentKey: 'or', textStyle: TextStyle())
                 ],
               ),
               const SizedBox(height: 20), // 垂直间距
@@ -123,10 +144,47 @@ class _LoginPageState extends State<LoginPage> {
                 },
               ),
               const SizedBox(height: 20), // 垂直间距
-              Text(
-                'By clicking continue, you agree to our Terms of Service, and Privacy Policy.',
-                style: TextStyle(fontSize: 14, color: Colors.grey[500]),
-              ),
+              RichText(text: TextSpan(
+                children: [TextSpan(
+                  text: Provider.of<LocalModel>(context,listen: false).getText('agree'),
+                  style: TextStyle(fontSize: 14, color: Colors.grey[500])
+                ),
+                  TextSpan(
+                    text: Provider.of<LocalModel>(context,listen: false).getText('service'),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                      color: Colors.black
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // 跳转到服务条款页面的逻辑
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ServiceTermsPage()),
+                        );
+                      },
+                  ),
+                  TextSpan(text: Provider.of<LocalModel>(context,listen: false).getText('and'),style: TextStyle(fontSize: 14, color: Colors.grey[500])),
+                  TextSpan(
+                    text: Provider.of<LocalModel>(context,listen: false).getText('privacy'),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                        color: Colors.black
+
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // 跳转到隐私政策页面的逻辑
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                        );
+                      },
+                  ),
+                ],
+              ))
             ],
           ),
         ),
