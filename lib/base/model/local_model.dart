@@ -19,23 +19,23 @@ class LocalModel with ChangeNotifier {
       case 'create':
         return _locale.languageCode == 'en' ? LanguageText.createEn : LanguageText.createZh;
       case 'emailTitle':
-        return _locale.languageCode == 'en' ? 'Enter your email to sign up for this app' : '请输入邮箱账号来登录';
+        return _locale.languageCode == 'en' ? LanguageText.inputEmailEn : LanguageText.inputEmailZh;
       case 'sighUp':
-        return _locale.languageCode == 'en' ? 'Sign up with email' : '通过电子邮件注册';
+        return _locale.languageCode == 'en' ? LanguageText.sighUpEmailEn : LanguageText.sighUpEmailZh;
       case 'emailValid':
-        return _locale.languageCode == 'en' ? 'Valid email address' : '邮箱有效';
+        return _locale.languageCode == 'en' ? LanguageText.validEmailEn : LanguageText.validEmailZh;
       case 'emailInput':
-        return _locale.languageCode == 'en' ? 'Please enter a valid email address' : '请输入有效的邮箱地址';
+        return _locale.languageCode == 'en' ? LanguageText.inputValidEmailEn : LanguageText.inputValidEmailZh;
       case 'or':
-        return _locale.languageCode == 'en' ? 'or continue with' : '或者';
+        return _locale.languageCode == 'en' ? LanguageText.orContinueEn : LanguageText.orContinueZh;
       case 'agree':
-        return _locale.languageCode == 'en' ? 'By clicking continue, you agree to our' : '点击继续，即表示您同意我们的';
+        return _locale.languageCode == 'en' ? LanguageText.agreeEn : LanguageText.agreeZh;
       case 'service':
-        return _locale.languageCode == 'en' ? 'Terms of Service' : '服务条款';
+        return _locale.languageCode == 'en' ? LanguageText.serviceEn : LanguageText.serviceEn;
       case 'and':
-        return _locale.languageCode == 'en' ? ' and ' : ' 和 ';
+        return _locale.languageCode == 'en' ? LanguageText.andEn : LanguageText.andEn;
       case 'privacy':
-        return _locale.languageCode == 'en' ? 'Privacy Policy.' : '隐私政策。';
+        return _locale.languageCode == 'en' ? LanguageText.privacyEn : LanguageText.privacyZh;
         default:
         return 'Key not found';
     }
