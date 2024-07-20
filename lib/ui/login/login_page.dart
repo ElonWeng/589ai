@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/model/local_model.dart';
+import 'package:runtool/base/store/login_store.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
 import 'package:runtool/base/widget/local_text.dart';
 import 'package:runtool/ui/login/login_model.dart';
@@ -103,6 +104,9 @@ class _LoginPageState extends State<LoginPage> {
                   }else{
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailInput'));
                   }
+                  //获取验证码
+                  var sendEmailCode = LoginStore.sendEmailCode(_emailController.text);
+
                 },
               ),
               const SizedBox(height: 20), // 垂直间距
