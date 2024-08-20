@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/ui/login/login_model.dart';
+import 'package:runtool/ui/login/login_page.dart';
 import 'package:runtool/ui/login/splash_page.dart';
 
 import 'base/model/local_model.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const SplashPage(title: 'Flutter Demo Home Page'),
+      home: const LoginPage(),
     ),);
   }
 }

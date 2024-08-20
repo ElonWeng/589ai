@@ -9,9 +9,9 @@ class DioManger {
   static String errMsg = '网络开小差～';
   static String tokenErrMsg = '登录已过期，请重新登录～';
   static String serverErrMsg = '服务开小差～';
-  static String host = '';//请求地址
-  static String port = '';
-  static String head = '';
+  static String host = 'http://34.27.187.159';//请求地址
+  static String port = '8092';
+  static String head = '123';
 
   /// global dio object
   static Dio? dio;
@@ -31,14 +31,15 @@ class DioManger {
   /// 创建 dio 实例对象
   static Dio? createInstance(header) {
     options = BaseOptions(
-        connectTimeout: Duration(microseconds: connectTime),
-        receiveTimeout: Duration(microseconds: connectTime),
+        connectTimeout: Duration(seconds: connectTime),
+        receiveTimeout: Duration(seconds: connectTime),
         responseType: ResponseType.json,
         validateStatus: (status) {
           return true;
         },
         // host: host,
-        headers: header);
+        // headers: header
+    );
     dio = Dio(options);
     return dio;
   }
@@ -99,7 +100,7 @@ class DioManger {
       } else {
         response = await dio!.get(url);
       }
-      LogUtil.debug('get请求返回',url+ response.toString() + '     ' + response.statusCode.toString());
+      LogUtil.debug('get请求返回 ',url+ response.toString() + '     ' + response.statusCode.toString());
       return response;
     } catch (e) {
       LogUtil.debug('-------------get请求出错-------------', e.toString());
@@ -130,7 +131,7 @@ class DioManger {
       } else {
         response = await dio!.post(url);
       }
-      LogUtil.debug('post请求返回', url+ response.toString() + '     ' + response.statusCode.toString());
+      LogUtil.debug('post请求返回 ', url+ response.toString() + '     ' + response.statusCode.toString());
       return response;
     } catch (e) {
       LogUtil.debug('-------------post请求出错-------------', e.toString());
@@ -309,43 +310,43 @@ class DioManger {
     Response response;
     if (method == DioManger.GET) {
       response = await get(
-        host  + url,
+        "$host:$port$url",
         formData: paramGet,
         header: head,
       );
     } else if (method == DioManger.POST) {
       response = await post(
-        host  + url,
+        "$host:$port$url",
         paramMap: paramPost,
         header: head,
       );
     } else if (method == DioManger.upPOST) {
       response = await upPost(
-        host  + url,
+        "$host:$port$url",
         formData: paramUpPost,
         header: head,
       );
     } else if (method == DioManger.OAUTH) {
       response = await oauth(
-        host  + url,
+        "$host:$port$url",
         formData: paramOauth,
         header: head,
       );
     } else if (method == DioManger.DELETE) {
       response = await delete(
-        host  + url,
+        "$host:$port$url",
         formData: paramDelete,
         header: head,
       );
     } else if (method == DioManger.DELETE_BODY) {
       response = await deleteBody(
-        host  + url,
+        "$host:$port$url",
         formData: paramDeleteBody,
         header: head,
       );
     } else if (method == DioManger.PUT) {
       response = await put(
-        host  + url,
+        "$host:$port$url",
         formData: paramPut,
         header: head,
       );
