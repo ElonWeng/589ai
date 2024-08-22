@@ -101,11 +101,12 @@ class _LoginPageState extends State<LoginPage> {
                 onTap: (){
                   if (loginModel.checkEmail(_emailController.text)) {
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailValid'));
+                    //获取验证码
+                    var sendEmailCode = LoginStore.sendEmailCode(_emailController.text);
                   }else{
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailInput'));
                   }
-                  //获取验证码
-                  var sendEmailCode = LoginStore.sendEmailCode(_emailController.text);
+
 
                 },
               ),
