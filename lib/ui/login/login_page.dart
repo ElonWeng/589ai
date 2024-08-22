@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:runtool/base/config/config_page.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
@@ -50,13 +51,23 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-
-              const Text(
-                '589.AI',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+              InkWell(
+                onTap: () {
+                  if (!CheckUtil.isRelease()) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ConfigPage()),
+                    );
+                  }
+                },
+                child: const Text(
+                  '589.AI',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(height: 50), // 垂直间距
               const LocalizedText(contentKey: 'create',textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),

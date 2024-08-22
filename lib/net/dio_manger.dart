@@ -2,15 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/base/util/log_util.dart';
+
+import '../base/util/check_util.dart';
 
 class DioManger {
   static int connectTime = 15;
   static String errMsg = '网络开小差～';
   static String tokenErrMsg = '登录已过期，请重新登录～';
   static String serverErrMsg = '服务开小差～';
-  static String host = 'http://34.27.187.159';//请求地址
-  static String port = '8092';
+  static String host = Configs.host;//请求地址
+  static String port = Configs.port;
   static String head = '123';
 
   /// global dio object
@@ -88,8 +91,7 @@ class DioManger {
     try {
       Response response;
       Dio? dio = createInstance(header);
-      const bool inProduction = bool.fromEnvironment('dart.vm.product');
-      if (!inProduction) {
+      if (!CheckUtil.isRelease()) {
         LogUtil.debug('get请求头部', header.toString());
         LogUtil.debug('get请求地址', url.toString());
         LogUtil.debug('get请求参数', formData.toString());
@@ -120,8 +122,7 @@ class DioManger {
     try {
       Response response;
       Dio? dio = createInstance(header);
-      const bool inProduction = bool.fromEnvironment('dart.vm.product');
-      if (!inProduction) {
+      if (!CheckUtil.isRelease()) {
         LogUtil.debug('post请求头部', header.toString());
         LogUtil.debug('post请求地址', url.toString());
         LogUtil.debug('post请求参数', paramMap.toString());
@@ -150,8 +151,7 @@ class DioManger {
     try {
       Response response;
       Dio? dio = createInstance(header);
-      const bool inProduction = bool.fromEnvironment('dart.vm.product');
-      if (!inProduction) {
+      if (!CheckUtil.isRelease()) {
         LogUtil.debug('upPost请求头部', header.toString());
         LogUtil.debug('upPost请求地址', url.toString());
         LogUtil.debug('upPost请求参数', formData.toString());
@@ -187,8 +187,7 @@ class DioManger {
       Dio? dio = createInstance(header);
       // print('oauth请求地址：' + url);
       // print('oauth请求参数：' + formData.toString());
-      const bool inProduction = bool.fromEnvironment('dart.vm.product');
-      if (!inProduction) {
+      if (!CheckUtil.isRelease()) {
         LogUtil.debug('oauth请求头部', header.toString());
         LogUtil.debug('oauth请求地址', url.toString());
         LogUtil.debug('oauth请求参数', formData.toString());
@@ -274,8 +273,7 @@ class DioManger {
       Dio? dio = createInstance(header);
       // print('put请求头部：' + header.toString());
       // print('put请求地址：' + url);
-      const bool inProduction = bool.fromEnvironment('dart.vm.product');
-      if (!inProduction) {
+      if (!CheckUtil.isRelease()) {
         LogUtil.debug('put请求地址', url);
         LogUtil.debug('put请求参数', formData.toString());
       }

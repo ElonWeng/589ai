@@ -6,4 +6,11 @@ class CheckUtil {
       );
       return emailRegex.hasMatch(email);
     }
+
+    //判断当前是什么环境
+    static bool isRelease(){
+      const bool inProduction =
+      bool.fromEnvironment('dart.vm.product');
+      return inProduction;
+    }
 }
