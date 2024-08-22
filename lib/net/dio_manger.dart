@@ -12,8 +12,6 @@ class DioManger {
   static String errMsg = '网络开小差～';
   static String tokenErrMsg = '登录已过期，请重新登录～';
   static String serverErrMsg = '服务开小差～';
-  static String host = Configs.host;//请求地址
-  static String port = Configs.port;
   static String head = '123';
 
   /// global dio object
@@ -308,43 +306,43 @@ class DioManger {
     Response response;
     if (method == DioManger.GET) {
       response = await get(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramGet,
         header: head,
       );
     } else if (method == DioManger.POST) {
       response = await post(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         paramMap: paramPost,
         header: head,
       );
     } else if (method == DioManger.upPOST) {
       response = await upPost(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramUpPost,
         header: head,
       );
     } else if (method == DioManger.OAUTH) {
       response = await oauth(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramOauth,
         header: head,
       );
     } else if (method == DioManger.DELETE) {
       response = await delete(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramDelete,
         header: head,
       );
     } else if (method == DioManger.DELETE_BODY) {
       response = await deleteBody(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramDeleteBody,
         header: head,
       );
     } else if (method == DioManger.PUT) {
       response = await put(
-        "$host:$port$url",
+        "${Configs.host}:${Configs.port}$url",
         formData: paramPut,
         header: head,
       );
