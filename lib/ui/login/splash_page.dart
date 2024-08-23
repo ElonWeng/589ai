@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/ui/login/login_page.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,7 +28,10 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

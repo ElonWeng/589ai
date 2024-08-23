@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/base/config/language_text.dart';
 
 class LocalModel with ChangeNotifier {
-  Locale _locale = const Locale('en', ''); // 默认语言
+  Locale _locale =  Locale(Configs.language, ''); // 默认语言
 
   Locale get locale => _locale;
 
@@ -31,9 +32,9 @@ class LocalModel with ChangeNotifier {
       case 'agree':
         return _locale.languageCode == 'en' ? LanguageText.agreeEn : LanguageText.agreeZh;
       case 'service':
-        return _locale.languageCode == 'en' ? LanguageText.serviceEn : LanguageText.serviceEn;
+        return _locale.languageCode == 'en' ? LanguageText.serviceEn : LanguageText.serviceZh;
       case 'and':
-        return _locale.languageCode == 'en' ? LanguageText.andEn : LanguageText.andEn;
+        return _locale.languageCode == 'en' ? LanguageText.andEn : LanguageText.andZh;
       case 'privacy':
         return _locale.languageCode == 'en' ? LanguageText.privacyEn : LanguageText.privacyZh;
         default:

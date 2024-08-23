@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import 'package:runtool/base/config/config_page.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
+import 'package:runtool/base/util/shared_preferences_util.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
 import 'package:runtool/base/widget/local_text.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/privacypolicy_page.dart';
 import 'package:runtool/ui/login/serviceterms_page.dart';
 
+import '../../base/config/configs.dart';
 import '../../base/util/check_util.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,6 +24,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   LoginModel loginModel = LoginModel();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +48,11 @@ class _LoginPageState extends State<LoginPage> {
                 languageModel.locale = languageModel.locale.languageCode == 'en'
                     ? const Locale('zh', '') // 切换到中文
                     : const Locale('en', ''); // 切换到英文
+                print('当前语言包${languageModel.locale.languageCode}');
+                Configs.language = languageModel.locale.languageCode;
+                SharedPreferencesUtil.setString(Configs.key_global, languageModel.locale.languageCode).then((_){
+
+                });
               },
             )
           ],

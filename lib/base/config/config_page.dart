@@ -25,7 +25,7 @@ class _ConfigPageState extends State<ConfigPage> {
               padding: const EdgeInsets.only(right: 15),
               child: InkWell(
                 onTap: () async {
-                  await SharedPreferencesUtil.setString('HostAndPort',
+                  await SharedPreferencesUtil.setString(Configs.key_host_port,
                           '${_hostController.text},${_portController.text}')
                       .then((_) {
                         Configs.host = _hostController.text;

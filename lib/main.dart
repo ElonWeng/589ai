@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
 import 'package:runtool/ui/login/splash_page.dart';
 
 import 'base/model/local_model.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Configs.init(); // 在这里初始化配置
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
