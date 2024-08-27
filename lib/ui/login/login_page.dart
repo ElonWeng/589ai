@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:runtool/base/config/config_page.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
+import 'package:runtool/base/model/toast_model.dart';
 import 'package:runtool/base/store/login_store.dart';
 import 'package:runtool/base/util/shared_preferences_util.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
@@ -133,6 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                       context.read<LoadingModel>().hide();
                     }else{
                       context.read<LoadingModel>().hide();
+                      context.read<ToastModel>().setText(sendEmailCode['msg']);
                     }
                   }else{
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailInput'));
