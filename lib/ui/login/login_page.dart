@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/config_page.dart';
+import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
 import 'package:runtool/base/util/shared_preferences_util.dart';
@@ -13,6 +14,7 @@ import 'package:runtool/ui/login/serviceterms_page.dart';
 
 import '../../base/config/configs.dart';
 import '../../base/util/check_util.dart';
+import '../../base/widget/loading_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -121,11 +123,17 @@ class _LoginPageState extends State<LoginPage> {
                     child: LocalizedText(contentKey: 'sighUp', textStyle: TextStyle(color: Colors.white),),
                   ),
                 ),
-                onTap: (){
+                onTap: () async {
                   if (loginModel.checkEmail(_emailController.text)) {
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailValid'));
                     //获取验证码
-                    var sendEmailCode = LoginStore.sendEmailCode(_emailController.text);
+                    context.read<LoadingModel>().show();
+                    Map sendEmailCode = await LoginStore.sendEmailCode(_emailController.text);
+                    if(sendEmailCode['success']){
+                      context.read<LoadingModel>().hide();
+                    }else{
+                      context.read<LoadingModel>().hide();
+                    }
                   }else{
                     SnackBarService.showSnackBar(context, Provider.of<LocalModel>(context,listen: false).getText('emailInput'));
                   }

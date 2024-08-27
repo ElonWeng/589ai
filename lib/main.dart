@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/configs.dart';
+import 'package:runtool/base/model/loading_model.dart';
+import 'package:runtool/base/widget/loading_widget.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
 import 'package:runtool/ui/login/splash_page.dart';
@@ -20,18 +22,24 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider(create: (_) => LoginModel()),
-      ChangeNotifierProvider(create: (_) => LocalModel()),
-    ],child: MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginModel()),
+        ChangeNotifierProvider(create: (_) => LocalModel()),
+        ChangeNotifierProvider(create: (_) => LoadingModel())
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: const LoadingOverlay(
+          child: LoginPage(),
+        ),
       ),
-      home: const LoginPage(),
-    ),);
+    );
   }
 }
 

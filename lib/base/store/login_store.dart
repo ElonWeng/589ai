@@ -35,11 +35,13 @@ class LoginStore{
       }else{
         return {
           'success': false,
+          'msg': data['msg']
         };
       }
     }catch(e){
       return {
         'success': false,
+        'msg': '获取失败'
       };
     }
   }
