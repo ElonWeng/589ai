@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/model/loading_model.dart';
-import 'package:runtool/base/model/toast_model.dart';
+import 'package:runtool/base/model/toast_provider.dart';
 
 class LoadingOverlay extends StatefulWidget {
   final Widget child;
@@ -13,26 +13,52 @@ class LoadingOverlay extends StatefulWidget {
 }
 
 class LoadingOverlayState extends State<LoadingOverlay> {
+
+
   @override
   Widget build(BuildContext context) {
     final loadingOverlayState = context.watch<LoadingModel>();
-    final toast = context.watch<ToastModel>();
-    print('当前的数据${toast.toastMsg}');
+    final toast = context.watch<ToastProvider>();
+    print('当前弹窗提示  ${toast.isVisible}');
     return Stack(
       children: [
         widget.child,
-        if (loadingOverlayState.isLoading)
-          Container(
-            color: Colors.black.withOpacity(0.3),
-            child: const Center(
-              child: CircularProgressIndicator(
-                color: Colors.blue,
-              ),
-            ),
-          ),
-        if (toast.toastMsg.isNotEmpty)
+        if(toast.isVisible)
           Center(
-            child: AutoDisappearText(toastMsg: toast.toastMsg,)
+            child: Container(
+              // 你可以根据需要调整padding、margin和width
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.symmetric(vertical: 10.0),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.5), // 灰色半透明背景
+                borderRadius: BorderRadius.circular(10.0), // 圆角
+              ),
+              child: Text(
+                toast.message,
+                style: const TextStyle(
+                  color: Colors.black, // 确保文本颜色与背景色对比鲜明
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.normal,
+                  decoration: TextDecoration.none,
+                  // 根据需要调整字体大小
+                ),
+                textAlign: TextAlign.center, // 文本居中对齐
+              ),
+            )
+          ),
+        if (loadingOverlayState.isLoading)
+           Center(
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.5), // 灰色半透明背景
+                  borderRadius: BorderRadius.circular(10.0), // 圆角
+                ),
+                child: const CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              )
           ),
       ],
     );

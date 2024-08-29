@@ -8,7 +8,7 @@ import 'package:runtool/base/util/log_util.dart';
 import '../base/util/check_util.dart';
 
 class DioManger {
-  static int connectTime = 15;
+  static int connectTime = 5;
   static String errMsg = '网络开小差～';
   static String tokenErrMsg = '登录已过期，请重新登录～';
   static String serverErrMsg = '服务开小差～';
@@ -107,7 +107,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -137,7 +137,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -170,7 +170,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
       return json.decode(e.toString());
     }
   }
@@ -202,7 +202,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -230,7 +230,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -257,7 +257,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -288,7 +288,7 @@ class DioManger {
       return Response(
           requestOptions: RequestOptions(path: url),
           statusCode: 500,
-          data: {'success': false, 'errMsg': errMsg});
+          data: {'success': false, 'msg': errMsg});
     }
   }
 
@@ -353,17 +353,18 @@ class DioManger {
         header: head,
       );
     }
+    print('当前返回数据'+response.toString());
     //部分接口数据有问题
     if (response.toString() == '') {
       return Response(
           requestOptions: RequestOptions(path: url),
-          data: {'success': false, 'errMsg': serverErrMsg});
+          data: {'success': false, 'msg': serverErrMsg});
     } else {
       LogUtil.debug('返回的状态码', response.statusCode.toString());
       if (response.statusCode == 401) {
         return Response(
             requestOptions: RequestOptions(path: url),
-            data: {'success': false, 'errMsg': tokenErrMsg});
+            data: {'success': false, 'msg': tokenErrMsg});
       }
     }
     return response;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/base/model/loading_model.dart';
-import 'package:runtool/base/model/toast_model.dart';
+import 'package:runtool/base/model/toast_provider.dart';
 import 'package:runtool/base/widget/loading_widget.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginModel()),
         ChangeNotifierProvider(create: (_) => LocalModel()),
         ChangeNotifierProvider(create: (_) => LoadingModel()),
-        ChangeNotifierProvider(create: (_) => ToastModel())
+        ChangeNotifierProvider(create: (_) => ToastProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
