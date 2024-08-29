@@ -138,10 +138,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onTap: () async {
                     if (loginModel.checkEmail(_emailController.text)) {
-                      SnackBarService.showSnackBar(
-                          context,
-                          Provider.of<LocalModel>(context, listen: false)
-                              .getText('emailValid'));
                       //获取验证码
                       context.read<LoadingModel>().show();
                       Map sendEmailCode =
@@ -154,10 +150,9 @@ class _LoginPageState extends State<LoginPage> {
                             .showToast(sendEmailCode['msg']);
                       }
                     } else {
-                      SnackBarService.showSnackBar(
-                          context,
-                          Provider.of<LocalModel>(context, listen: false)
-                              .getText('emailInput'));
+                      Provider.of<ToastProvider>(context, listen: false)
+                          .showToast(Provider.of<LocalModel>(context, listen: false)
+                          .getText('emailInput'));
                     }
                   },
                 ),
