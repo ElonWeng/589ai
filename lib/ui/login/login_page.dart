@@ -5,6 +5,7 @@ import 'package:runtool/base/config/config_page.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
+import 'package:runtool/base/util/routes_util.dart';
 import 'package:runtool/base/util/shared_preferences_util.dart';
 import 'package:runtool/base/util/snackbar_util.dart';
 import 'package:runtool/base/widget/local_text.dart';
@@ -144,6 +145,9 @@ class _LoginPageState extends State<LoginPage> {
                           await LoginStore.sendEmailCode(_emailController.text);
                       if (sendEmailCode['success']) {
                         context.read<LoadingModel>().hide();
+                        RoutesUtil.navigateToCode(context, {
+                          'email':_emailController.text
+                        });
                       } else {
                         context.read<LoadingModel>().hide();
                         Provider.of<ToastProvider>(context, listen: false)

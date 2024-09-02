@@ -4,10 +4,12 @@ import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/toast_provider.dart';
 import 'package:runtool/base/widget/loading_widget.dart';
+import 'package:runtool/ui/login/code_page.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
 import 'package:runtool/ui/login/splash_page.dart';
 
+import 'base/config/routes.dart';
 import 'base/model/local_model.dart';
 
 Future<void> main() async {
@@ -37,6 +39,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
+        routes: {
+          CODE_PAGE: (context) => CodePage(arguments: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
+        },
         home: const LoadingOverlay(
           child: LoginPage(),
         ),

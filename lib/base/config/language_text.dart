@@ -20,4 +20,8 @@ class LanguageText{
   static String andZh = ' 和 ';
   static String privacyEn = 'Privacy Policy';
   static String privacyZh = '隐私政策';
+  static String codeInputEn = 'Enter the verification code';
+  static String codeInputZh = '输入验证码';
+  static String codeInputContentEn = 'The verification code has been sent ';
+  static String codeInputContentZh = '验证码已发送到 ';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:runtool/base/config/configs.dart';
+import 'package:runtool/base/config/language_key.dart';
 import 'package:runtool/base/config/language_text.dart';
 
 class LocalModel with ChangeNotifier {
@@ -37,7 +38,11 @@ class LocalModel with ChangeNotifier {
         return _locale.languageCode == 'en' ? LanguageText.andEn : LanguageText.andZh;
       case 'privacy':
         return _locale.languageCode == 'en' ? LanguageText.privacyEn : LanguageText.privacyZh;
-        default:
+      case 'code_input':
+        return _locale.languageCode == 'en' ? LanguageText.codeInputEn : LanguageText.codeInputZh;
+      case LanguageKey.strCodeInputContent:
+        return _locale.languageCode == 'en' ? LanguageText.codeInputContentEn : LanguageText.codeInputContentZh;
+      default:
         return 'Key not found';
     }
   }
