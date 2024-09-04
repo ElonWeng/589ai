@@ -38,7 +38,7 @@ class LocalModel with ChangeNotifier {
         return _locale.languageCode == 'en' ? LanguageText.andEn : LanguageText.andZh;
       case 'privacy':
         return _locale.languageCode == 'en' ? LanguageText.privacyEn : LanguageText.privacyZh;
-      case 'code_input':
+      case LanguageKey.strCodeInput:
         return _locale.languageCode == 'en' ? LanguageText.codeInputEn : LanguageText.codeInputZh;
       case LanguageKey.strCodeInputContent:
         return _locale.languageCode == 'en' ? LanguageText.codeInputContentEn : LanguageText.codeInputContentZh;

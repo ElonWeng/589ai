@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/config_page.dart';
+import 'package:runtool/base/config/navigator_key.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
@@ -137,26 +138,27 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  onTap: () async {
+                  onTap: () {
                     if (loginModel.checkEmail(_emailController.text)) {
                       //获取验证码
                       context.read<LoadingModel>().show();
-                      Map sendEmailCode =
-                          await LoginStore.sendEmailCode(_emailController.text);
-                      if (sendEmailCode['success']) {
-                        context.read<LoadingModel>().hide();
-                        RoutesUtil.navigateToCode(context, {
-                          'email':_emailController.text
-                        });
-                      } else {
-                        context.read<LoadingModel>().hide();
-                        Provider.of<ToastProvider>(context, listen: false)
-                            .showToast(sendEmailCode['msg']);
-                      }
+                      LoginStore.sendEmailCode(_emailController.text)
+                          .then((value) {
+                        if (value['success']) {
+                          context.read<LoadingModel>().hide();
+                          RoutesUtil.navigateToCode(context,
+                              {NavigatorKey.keyEmail: _emailController.text});
+                        } else {
+                          context.read<LoadingModel>().hide();
+                          Provider.of<ToastProvider>(context, listen: false)
+                              .showToast(value['msg']);
+                        }
+                      });
                     } else {
                       Provider.of<ToastProvider>(context, listen: false)
-                          .showToast(Provider.of<LocalModel>(context, listen: false)
-                          .getText('emailInput'));
+                          .showToast(
+                              Provider.of<LocalModel>(context, listen: false)
+                                  .getText('emailInput'));
                     }
                   },
                 ),
