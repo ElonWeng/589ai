@@ -31,6 +31,11 @@ class CodePage extends StatefulWidget {
 
 class _CodePageState extends State<CodePage> {
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _codeOneController = TextEditingController();
+  final TextEditingController _codeTwoController = TextEditingController();
+  final TextEditingController _codeThreeController = TextEditingController();
+  final TextEditingController _codeFourController = TextEditingController();
+
   LoginModel loginModel = LoginModel();
 
   @override
@@ -80,28 +85,28 @@ class _CodePageState extends State<CodePage> {
                 Row(
                   children: [
                     BoxBgWidget(
-                      child: TextField(),
                       height: 50,
                       width: 50,
+                      editingController: _codeOneController,
                     ),
                     const SizedBox(width: 15),
                     BoxBgWidget(
-                      child: TextField(),
                       height: 50,
                       width: 50,
+                      editingController: _codeTwoController,
                     ),
                     const SizedBox(width: 15),
 
                     BoxBgWidget(
-                      child: TextField(),
                       height: 50,
                       width: 50,
+                      editingController: _codeThreeController,
                     ),
                     const SizedBox(width: 15),
                     BoxBgWidget(
-                      child: TextField(),
                       height: 50,
                       width: 50,
+                      editingController: _codeFourController,
                     ),
                   ],
                 )
