@@ -24,4 +24,10 @@ class LanguageText{
   static String codeInputZh = '输入验证码';
   static String codeInputContentEn = 'The verification code has been sent ';
   static String codeInputContentZh = '验证码已发送到 ';
+  static String codeGetEn = 'Not receiving verification code?';
+  static String codeGetZh = '收不到验证码?';
+  static String codeGetAgainEn = 'Get again';
+  static String codeGetAgainZh = '重新获取';
+  static String codeGetWaitEn = 'Please wait patiently for the verification code';
+  static String codeGetWaitZh = '请耐心等待验证码';
 }

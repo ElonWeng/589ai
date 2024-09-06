@@ -18,7 +18,7 @@ import 'package:runtool/ui/login/serviceterms_page.dart';
 import '../../base/config/configs.dart';
 import '../../base/model/toast_provider.dart';
 import '../../base/util/check_util.dart';
-import '../../base/widget/loading_widget.dart';
+import '../../base/widget/base_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

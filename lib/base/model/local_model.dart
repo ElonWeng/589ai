@@ -42,6 +42,12 @@ class LocalModel with ChangeNotifier {
         return _locale.languageCode == 'en' ? LanguageText.codeInputEn : LanguageText.codeInputZh;
       case LanguageKey.strCodeInputContent:
         return _locale.languageCode == 'en' ? LanguageText.codeInputContentEn : LanguageText.codeInputContentZh;
+      case LanguageKey.strCodeGet:
+        return _locale.languageCode == 'en' ? LanguageText.codeGetEn : LanguageText.codeGetZh;
+      case LanguageKey.strCodeGetAgain:
+        return _locale.languageCode == 'en' ? LanguageText.codeGetAgainEn : LanguageText.codeGetAgainZh;
+      case LanguageKey.strCodeGetWait:
+        return _locale.languageCode == 'en' ? LanguageText.codeGetWaitEn : LanguageText.codeGetWaitZh;
       default:
         return 'Key not found';
     }

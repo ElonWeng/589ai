@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/configs.dart';
 import 'package:runtool/base/model/loading_model.dart';
+import 'package:runtool/base/model/time_model.dart';
 import 'package:runtool/base/model/toast_provider.dart';
-import 'package:runtool/base/widget/loading_widget.dart';
+import 'package:runtool/base/widget/base_page.dart';
 import 'package:runtool/ui/login/code_page.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocalModel()),
         ChangeNotifierProvider(create: (_) => LoadingModel()),
         ChangeNotifierProvider(create: (_) => ToastProvider()),
+        ChangeNotifierProvider(create: (_) => TimerModel()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
         routes: {
           CODE_PAGE: (context) => CodePage(arguments: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
         },
-        home: const LoadingOverlay(
+        home: const BaseProviderWidget(
           child: LoginPage(),
         ),
       ),

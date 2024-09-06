@@ -3,21 +3,21 @@ import 'package:provider/provider.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/toast_provider.dart';
 
-class LoadingOverlay extends StatefulWidget {
+class BaseProviderWidget extends StatefulWidget {
   final Widget child;
 
-  const LoadingOverlay({Key? key, required this.child}) : super(key: key);
+  const BaseProviderWidget({Key? key, required this.child}) : super(key: key);
 
   @override
-  LoadingOverlayState createState() => LoadingOverlayState();
+  BaseProviderWidgetState createState() => BaseProviderWidgetState();
 }
 
-class LoadingOverlayState extends State<LoadingOverlay> {
+class BaseProviderWidgetState extends State<BaseProviderWidget> {
 
 
   @override
   Widget build(BuildContext context) {
-    final loadingOverlayState = context.watch<LoadingModel>();
+    final baseProviderWidgetState = context.watch<LoadingModel>();
     final toast = context.watch<ToastProvider>();
     print('当前弹窗提示  ${toast.isVisible}');
     return Stack(
@@ -46,7 +46,7 @@ class LoadingOverlayState extends State<LoadingOverlay> {
               ),
             )
           ),
-        if (loadingOverlayState.isLoading)
+        if (baseProviderWidgetState.isLoading)
            Center(
               child: Container(
                 padding: const EdgeInsets.all(8.0),
