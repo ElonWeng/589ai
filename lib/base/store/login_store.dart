@@ -1,4 +1,5 @@
 import 'package:runtool/base/store/login_api.dart';
+import 'package:runtool/net/dio_manger.dart';
 
 class LoginStore{
 
@@ -7,18 +8,20 @@ class LoginStore{
     var response =await LoginApi.postLogin(email, code);
     try{
       var data = response.data;
-      if(data['code'] == 200){
+      if(data[DioManger.code] == 200){
         return {
-          'success': true,
+          DioManger.success: true,
         };
       }else{
         return {
-          'success': false,
+          DioManger.success: false,
+          DioManger.msg: data[DioManger.msg]
         };
       }
     }catch(e){
       return {
-        'success': false,
+        DioManger.success: false,
+        DioManger.msg:'登录失败!'
       };
     }
   }
@@ -28,20 +31,20 @@ class LoginStore{
     var response = await LoginApi.getSendEmailCode(email);
     try{
       var data = response.data;
-      if(data['code'] == 200){
+      if(data[DioManger.code] == 200){
         return {
-          'success': true,
+          DioManger.success: true,
         };
       }else{
         return {
-          'success': false,
-          'msg': data['msg']
+          DioManger.success: false,
+          DioManger.msg: data[DioManger.msg]
         };
       }
     }catch(e){
       return {
-        'success': false,
-        'msg': '获取失败'
+        DioManger.success: false,
+        DioManger.msg: '获取失败'
       };
     }
   }

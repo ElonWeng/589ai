@@ -4,4 +4,6 @@ class LanguageKey{
   static const String strCodeGet = 'code_get';
   static const String strCodeGetAgain = 'code_get_again';
   static const String strCodeGetWait = 'code_get_wait';
+  static const String strCodeNext = 'code_next';
+
 }

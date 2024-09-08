@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/configs.dart';
+import 'package:runtool/base/model/font_size_model.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/time_model.dart';
 import 'package:runtool/base/model/toast_provider.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LoginModel()),
         ChangeNotifierProvider(create: (_) => LocalModel()),
+        ChangeNotifierProvider(create: (_) => FontSizeModel()),
         ChangeNotifierProvider(create: (_) => LoadingModel()),
         ChangeNotifierProvider(create: (_) => ToastProvider()),
         ChangeNotifierProvider(create: (_) => TimerModel()),

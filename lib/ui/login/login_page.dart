@@ -8,17 +8,18 @@ import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
 import 'package:runtool/base/util/routes_util.dart';
 import 'package:runtool/base/util/shared_preferences_util.dart';
-import 'package:runtool/base/util/snackbar_util.dart';
+import 'package:runtool/base/widget/input_bg.dart';
 import 'package:runtool/base/widget/local_text.dart';
-import 'package:runtool/base/widget/toast_widget.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/privacypolicy_page.dart';
 import 'package:runtool/ui/login/serviceterms_page.dart';
 
 import '../../base/config/configs.dart';
+import '../../base/config/text_size_key.dart';
+import '../../base/model/font_size_model.dart';
 import '../../base/model/toast_provider.dart';
 import '../../base/util/check_util.dart';
-import '../../base/widget/base_page.dart';
+import '../../net/dio_manger.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -80,49 +81,50 @@ class _LoginPageState extends State<LoginPage> {
                       );
                     }
                   },
-                  child: const Text(
+                  child:  Text(
                     '589.AI',
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: 24,
+                        fontSize: Provider.of<FontSizeModel>(context, listen: false)
+                            .getTextSize(TextSizeKey.logoTitleSize),
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(height: 50), // 垂直间距
-                const LocalizedText(
+                LocalizedText(
                   contentKey: 'create',
-                  textStyle:
-                      TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  textStyle: TextStyle(
+                      fontSize:
+                          Provider.of<FontSizeModel>(context, listen: false)
+                              .getTextSize(TextSizeKey.bigTitleSize),
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10), // 垂直间距
-                const LocalizedText(
+                LocalizedText(
                     contentKey: 'emailTitle',
-                    textStyle: TextStyle(color: Colors.black, fontSize: 16)),
+                    textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize:
+                            Provider.of<FontSizeModel>(context, listen: false)
+                                .getTextSize(TextSizeKey.titleSize))),
                 const SizedBox(height: 20), // 垂直间距
                 /*email输入框*/
-                Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                    border: Border.all(
-                      color: Colors.black12, // 设置边框颜色
-                      width: 1, // 设置边框宽度
+                InputBgWidget(
+                    child: Center(
+                  child: TextField(
+                    controller: _emailController,
+                    decoration:  InputDecoration(
+                      hintText: 'email@domain.com',
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.normal, color: Colors.grey,
+                      fontSize: Provider.of<FontSizeModel>(context, listen: false)
+                          .getTextSize(TextSizeKey.titleSize)),
+                      border: InputBorder.none,
+                      contentPadding:
+                          const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                     ),
                   ),
-                  child: Center(
-                    child: TextField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        hintText: 'email@domain.com',
-                        hintStyle: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.grey),
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 15),
-                      ),
-                    ),
-                  ),
-                ),
+                )),
                 const SizedBox(height: 15), // 垂直间距
                 InkWell(
                   child: Container(
@@ -131,10 +133,14 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       color: Colors.black,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: LocalizedText(
                         contentKey: 'sighUp',
-                        textStyle: TextStyle(color: Colors.white),
+                        textStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: Provider.of<FontSizeModel>(context,
+                                    listen: false)
+                                .getTextSize(TextSizeKey.titleSize)),
                       ),
                     ),
                   ),
@@ -144,14 +150,14 @@ class _LoginPageState extends State<LoginPage> {
                       context.read<LoadingModel>().show();
                       LoginStore.sendEmailCode(_emailController.text)
                           .then((value) {
-                        if (value['success']) {
+                        if (value[DioManger.success]) {
                           context.read<LoadingModel>().hide();
                           RoutesUtil.navigateToCode(context,
                               {NavigatorKey.keyEmail: _emailController.text});
                         } else {
                           context.read<LoadingModel>().hide();
                           Provider.of<ToastProvider>(context, listen: false)
-                              .showToast(value['msg']);
+                              .showToast(value[DioManger.msg]);
                         }
                       });
                     } else {
@@ -163,10 +169,15 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 20), // 垂直间距
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    LocalizedText(contentKey: 'or', textStyle: TextStyle())
+                    LocalizedText(
+                        contentKey: 'or',
+                        textStyle: TextStyle(
+                            fontSize: Provider.of<FontSizeModel>(context,
+                                    listen: false)
+                                .getTextSize(TextSizeKey.titleSize)))
                   ],
                 ),
                 const SizedBox(height: 20), // 垂直间距
@@ -188,16 +199,17 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(width: 10),
                         Text(
                           context.watch<LoginModel>().getText(),
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
-                              fontSize: 14),
+                              fontSize: Provider.of<FontSizeModel>(context,
+                                      listen: false)
+                                  .getTextSize(TextSizeKey.titleSize)),
                         ),
                       ],
                     )),
                   ),
                   onTap: () {
-                    context.read<LoginModel>().setText('Loading...');
                   },
                 ),
                 const SizedBox(height: 20), // 垂直间距
@@ -207,8 +219,11 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(
                         text: Provider.of<LocalModel>(context, listen: false)
                             .getText('agree'),
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.grey[500])),
+                        style: TextStyle(
+                            fontSize: Provider.of<FontSizeModel>(context,
+                                    listen: false)
+                                .getTextSize(TextSizeKey.contentSize),
+                            color: Colors.grey[500])),
                     TextSpan(
                       text: Provider.of<LocalModel>(context, listen: false)
                           .getText('service'),
@@ -229,8 +244,11 @@ class _LoginPageState extends State<LoginPage> {
                     TextSpan(
                         text: Provider.of<LocalModel>(context, listen: false)
                             .getText('and'),
-                        style:
-                            TextStyle(fontSize: 14, color: Colors.grey[500])),
+                        style: TextStyle(
+                            fontSize: Provider.of<FontSizeModel>(context,
+                                    listen: false)
+                                .getTextSize(TextSizeKey.contentSize),
+                            color: Colors.grey[500])),
                     TextSpan(
                       text: Provider.of<LocalModel>(context, listen: false)
                           .getText('privacy'),

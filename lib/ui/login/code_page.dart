@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/language_key.dart';
+import 'package:runtool/base/config/text_size_key.dart';
+import 'package:runtool/base/model/font_size_model.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
@@ -11,6 +13,8 @@ import 'package:runtool/ui/login/login_model.dart';
 import '../../base/config/navigator_key.dart';
 import '../../base/model/time_model.dart';
 import '../../base/model/toast_provider.dart';
+import '../../base/widget/input_bg.dart';
+import '../../net/dio_manger.dart';
 
 class CodePage extends StatefulWidget {
   final Map<String, dynamic> arguments;
@@ -22,11 +26,13 @@ class CodePage extends StatefulWidget {
 }
 
 class _CodePageState extends State<CodePage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   final TextEditingController _codeOneController = TextEditingController();
   final TextEditingController _codeTwoController = TextEditingController();
   final TextEditingController _codeThreeController = TextEditingController();
   final TextEditingController _codeFourController = TextEditingController();
+  final TextEditingController _codeFiveController = TextEditingController();
+  final TextEditingController _codeSixController = TextEditingController();
 
   LoginModel loginModel = LoginModel();
 
@@ -38,117 +44,206 @@ class _CodePageState extends State<CodePage> {
 
   @override
   Widget build(BuildContext context) {
-    // var remainingTime = Provider.of<TimerModel>(context, listen: false).remainingTime;
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              InkWell(
+                child: LocalizedText(
+                  contentKey: LanguageKey.strCodeNext,
+                  textStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize:
+                          Provider.of<FontSizeModel>(context, listen: false)
+                              .getTextSize(TextSizeKey.titleSize)),
+                ),
+                onTap: () {
+                  if(_codeController.text.isNotEmpty){
+                    context.read<LoadingModel>().show();
+                    LoginStore.login(widget.arguments[NavigatorKey.keyEmail], _codeController.text).then((value){
+                      if(value[DioManger.success]){
+                        context.read<LoadingModel>().hide();
+                      }else{
+                        context.read<LoadingModel>().hide();
+                        Provider.of<ToastProvider>(context, listen: false)
+                            .showToast(value[DioManger.msg]);
+                      }
+                    });
+                  }else{
+                    Provider.of<ToastProvider>(context, listen: false)
+                        .showToast(
+                        Provider.of<LocalModel>(context, listen: false)
+                            .getText(LanguageKey.strCodeInput));
+                  }
+                },
+              )
+            ],
+          ),
+        ),
         body: BaseProviderWidget(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: SingleChildScrollView(
-              child:
-              Consumer<TimerModel>(
+              child: Consumer<TimerModel>(
                 builder: (context, model, child) {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10), // 垂直间距
-                      const LocalizedText(
+                      LocalizedText(
                         contentKey: LanguageKey.strCodeInput,
-                        textStyle:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        textStyle: TextStyle(
+                            fontSize: Provider.of<FontSizeModel>(context,
+                                    listen: false)
+                                .getTextSize(TextSizeKey.bigTitleSize),
+                            fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 10), // 垂直间距
                       RichText(
                           text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: Provider.of<LocalModel>(context, listen: false)
-                                      .getText(LanguageKey.strCodeInputContent),
-                                  style:
-                                  TextStyle(fontSize: 14, color: Colors.grey[500])),
-                              TextSpan(
-                                text: widget.arguments['email'].toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.black),
-                              ),
-                            ],
-                          )),
-                      const SizedBox(height: 20), // 垂直间距
-                      Row(
                         children: [
-                          BoxBgWidget(
-                            height: 50,
-                            width: 50,
-                            editingController: _codeOneController,
-                          ),
-                          const SizedBox(width: 15),
-                          BoxBgWidget(
-                            height: 50,
-                            width: 50,
-                            editingController: _codeTwoController,
-                          ),
-                          const SizedBox(width: 15),
-                          BoxBgWidget(
-                            height: 50,
-                            width: 50,
-                            editingController: _codeThreeController,
-                          ),
-                          const SizedBox(width: 15),
-                          BoxBgWidget(
-                            height: 50,
-                            width: 50,
-                            editingController: _codeFourController,
+                          TextSpan(
+                              text: Provider.of<LocalModel>(context,
+                                      listen: false)
+                                  .getText(LanguageKey.strCodeInputContent),
+                              style: TextStyle(
+                                  fontSize: Provider.of<FontSizeModel>(context,
+                                          listen: false)
+                                      .getTextSize(TextSizeKey.contentSize),
+                                  color: Colors.grey[500])),
+                          TextSpan(
+                            text: widget.arguments[NavigatorKey.keyEmail].toString(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                color: Colors.black),
                           ),
                         ],
-                      ),
+                      )),
+                      const SizedBox(height: 20), // 垂直间距
+                      //格子的验证码 先保留
+                      // Row(
+                      //   children: [
+                      //     Expanded(
+                      //       child: BoxBgWidget(
+                      //         height: 50,
+                      //         width: 50,
+                      //         editingController: _codeOneController,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 15),
+                      //     Expanded(
+                      //       child: BoxBgWidget(
+                      //         height: 50,
+                      //         width: 50,
+                      //         editingController: _codeTwoController,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 15),
+                      //     Expanded(
+                      //       child: BoxBgWidget(
+                      //         height: 50,
+                      //         width: 50,
+                      //         editingController: _codeThreeController,
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 15),
+                      //     Expanded(
+                      //         child: BoxBgWidget(
+                      //       height: 50,
+                      //       width: 50,
+                      //       editingController: _codeFourController,
+                      //     )),
+                      //     const SizedBox(width: 15),
+                      //     Expanded(
+                      //         child: BoxBgWidget(
+                      //       height: 50,
+                      //       width: 50,
+                      //       editingController: _codeFiveController,
+                      //     )),
+                      //     const SizedBox(width: 15),
+                      //     Expanded(
+                      //         child: BoxBgWidget(
+                      //       height: 50,
+                      //       width: 50,
+                      //       editingController: _codeSixController,
+                      //     )),
+                      //   ],
+                      // ),
+                      InputBgWidget(
+                          child: Center(
+                        child: TextField(
+                          controller: _codeController,
+                          decoration: const InputDecoration(
+                            hintText: '',
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 15),
+                          ),
+                        ),
+                      )),
+                      const SizedBox(height: 10),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            child: Text(Provider.of<LocalModel>(context, listen: false)
-                                .getText(LanguageKey.strCodeGet)),
-                            onTap: (){
-                              if(model.remainingTime == 0){
+                            child: LocalizedText(
+                              contentKey: LanguageKey.strCodeGet,
+                              textStyle: TextStyle(
+                                  fontSize: Provider.of<FontSizeModel>(context,
+                                          listen: false)
+                                      .getTextSize(TextSizeKey.contentSize)),
+                            ),
+                            onTap: () {
+                              if (model.remainingTime == 0) {
                                 context.read<LoadingModel>().show();
-                                LoginStore.sendEmailCode(widget.arguments[NavigatorKey.keyEmail])
+                                LoginStore.sendEmailCode(
+                                        widget.arguments[NavigatorKey.keyEmail])
                                     .then((value) {
-                                  if (value['success']) {
+                                  if (value[DioManger.success]) {
                                     context.read<LoadingModel>().hide();
                                     context.read<TimerModel>().startTimer();
                                   } else {
                                     context.read<LoadingModel>().hide();
-                                    Provider.of<ToastProvider>(context, listen: false)
-                                        .showToast(value['msg']);
+                                    Provider.of<ToastProvider>(context,
+                                            listen: false)
+                                        .showToast(value[DioManger.msg]);
                                   }
                                 });
-                              }else{
-                                Provider.of<ToastProvider>(context, listen: false)
-                                    .showToast(
-                                    Provider.of<LocalModel>(context, listen: false)
+                              } else {
+                                Provider.of<ToastProvider>(context,
+                                        listen: false)
+                                    .showToast(Provider.of<LocalModel>(context,
+                                            listen: false)
                                         .getText(LanguageKey.strCodeGetWait));
                               }
                             },
                           ),
                           InkWell(
-                            child:
-                            Text(model.remainingTime == 0 ?
-                            Provider.of<LocalModel>(context, listen: false)
-                                .getText(LanguageKey.strCodeGetAgain):'${model.remainingTime}s'),
-                            onTap: (){
-                              if(model.remainingTime == 0){
+                            child: Text(model.remainingTime == 0
+                                ? Provider.of<LocalModel>(context,
+                                        listen: false)
+                                    .getText(LanguageKey.strCodeGetAgain)
+                                : '${model.remainingTime}s'),
+                            onTap: () {
+                              if (model.remainingTime == 0) {
                                 context.read<LoadingModel>().show();
-                                LoginStore.sendEmailCode(widget.arguments[NavigatorKey.keyEmail])
+                                LoginStore.sendEmailCode(
+                                        widget.arguments[NavigatorKey.keyEmail])
                                     .then((value) {
-                                  if (value['success']) {
+                                  if (value[DioManger.success]) {
                                     context.read<LoadingModel>().hide();
                                     context.read<TimerModel>().startTimer();
                                   } else {
                                     context.read<LoadingModel>().hide();
-                                    Provider.of<ToastProvider>(context, listen: false)
-                                        .showToast(value['msg']);
+                                    Provider.of<ToastProvider>(context,
+                                            listen: false)
+                                        .showToast(value[DioManger.msg]);
                                   }
                                 });
                               }
@@ -160,7 +255,6 @@ class _CodePageState extends State<CodePage> {
                   );
                 },
               ),
-
             ),
           ),
         ));
@@ -168,7 +262,7 @@ class _CodePageState extends State<CodePage> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _codeController.dispose();
     super.dispose();
   }
 }

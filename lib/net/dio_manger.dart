@@ -8,10 +8,13 @@ import 'package:runtool/base/util/log_util.dart';
 import '../base/util/check_util.dart';
 
 class DioManger {
-  static int connectTime = 5;
-  static String errMsg = '网络开小差～';
+  static String success = 'success';
+  static String msg = 'msg';
+  static String code = 'code';
+  static int connectTime = 10;
+  static String errMsg = '服务异常';
   static String tokenErrMsg = '登录已过期，请重新登录～';
-  static String serverErrMsg = '服务开小差～';
+  static String serverErrMsg = '服务异常';
   static String head = '123';
 
   /// global dio object

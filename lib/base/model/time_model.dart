@@ -13,7 +13,7 @@ class TimerModel with ChangeNotifier {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _remainingTime--;
       notifyListeners(); // 通知监听器状态已更改
-      print('当前的计时$_remainingTime');
+      // print('当前的计时$_remainingTime');
       if (_remainingTime <= 0) {
         timer.cancel(); // 倒计时结束，取消Timer
         // _remainingTime = 60; // 可以选择重置或保持为0

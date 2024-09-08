@@ -30,4 +30,6 @@ class LanguageText{
   static String codeGetAgainZh = '重新获取';
   static String codeGetWaitEn = 'Please wait patiently for the verification code';
   static String codeGetWaitZh = '请耐心等待验证码';
+  static String codeNextEn = 'Next';
+  static String codeNextZh = '下一步';
 }
