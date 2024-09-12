@@ -32,4 +32,6 @@ class LanguageText{
   static String codeGetWaitZh = '请耐心等待验证码';
   static String codeNextEn = 'Next';
   static String codeNextZh = '下一步';
+  static String successEn = 'Success';
+  static String successZh = '成功';
 }

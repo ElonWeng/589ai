@@ -62,10 +62,11 @@ class _CodePageState extends State<CodePage> {
                   if(_codeController.text.isNotEmpty){
                     context.read<LoadingModel>().show();
                     LoginStore.login(widget.arguments[NavigatorKey.keyEmail], _codeController.text).then((value){
+                      context.read<LoadingModel>().hide();
                       if(value[DioManger.success]){
-                        context.read<LoadingModel>().hide();
+                        Provider.of<ToastProvider>(context, listen: false)
+                            .showToast(Provider.of<LocalModel>(context, listen: false).getText(LanguageKey.strSuccess));
                       }else{
-                        context.read<LoadingModel>().hide();
                         Provider.of<ToastProvider>(context, listen: false)
                             .showToast(value[DioManger.msg]);
                       }
@@ -205,11 +206,12 @@ class _CodePageState extends State<CodePage> {
                                 LoginStore.sendEmailCode(
                                         widget.arguments[NavigatorKey.keyEmail])
                                     .then((value) {
+                                  context.read<LoadingModel>().hide();
                                   if (value[DioManger.success]) {
-                                    context.read<LoadingModel>().hide();
                                     context.read<TimerModel>().startTimer();
+                                    Provider.of<ToastProvider>(context, listen: false)
+                                        .showToast(Provider.of<LocalModel>(context, listen: false).getText(LanguageKey.strSuccess));
                                   } else {
-                                    context.read<LoadingModel>().hide();
                                     Provider.of<ToastProvider>(context,
                                             listen: false)
                                         .showToast(value[DioManger.msg]);
@@ -236,11 +238,12 @@ class _CodePageState extends State<CodePage> {
                                 LoginStore.sendEmailCode(
                                         widget.arguments[NavigatorKey.keyEmail])
                                     .then((value) {
+                                  context.read<LoadingModel>().hide();
                                   if (value[DioManger.success]) {
-                                    context.read<LoadingModel>().hide();
                                     context.read<TimerModel>().startTimer();
+                                    Provider.of<ToastProvider>(context, listen: false)
+                                        .showToast(Provider.of<LocalModel>(context, listen: false).getText(LanguageKey.strSuccess));
                                   } else {
-                                    context.read<LoadingModel>().hide();
                                     Provider.of<ToastProvider>(context,
                                             listen: false)
                                         .showToast(value[DioManger.msg]);

@@ -5,5 +5,6 @@ class LanguageKey{
   static const String strCodeGetAgain = 'code_get_again';
   static const String strCodeGetWait = 'code_get_wait';
   static const String strCodeNext = 'code_next';
+  static const String strSuccess = 'success';
 
 }
