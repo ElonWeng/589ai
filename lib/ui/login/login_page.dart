@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/config_page.dart';
 import 'package:runtool/base/config/navigator_key.dart';
+import 'package:runtool/base/config/routes.dart';
 import 'package:runtool/base/model/loading_model.dart';
 import 'package:runtool/base/model/local_model.dart';
 import 'package:runtool/base/store/login_store.dart';
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                           .then((value) {
                         if (value[DioManger.success]) {
                           context.read<LoadingModel>().hide();
-                          RoutesUtil.navigateToCode(context,
+                          RoutesUtil.navigateToPage(context,CODE_PAGE,
                               {NavigatorKey.keyEmail: _emailController.text});
                         } else {
                           context.read<LoadingModel>().hide();

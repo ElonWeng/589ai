@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:runtool/base/config/language_key.dart';
+import 'package:runtool/base/config/routes.dart';
 import 'package:runtool/base/config/text_size_key.dart';
 import 'package:runtool/base/model/font_size_model.dart';
 import 'package:runtool/base/model/loading_model.dart';
@@ -13,6 +14,7 @@ import 'package:runtool/ui/login/login_model.dart';
 import '../../base/config/navigator_key.dart';
 import '../../base/model/time_model.dart';
 import '../../base/model/toast_provider.dart';
+import '../../base/util/routes_util.dart';
 import '../../base/widget/input_bg.dart';
 import '../../net/dio_manger.dart';
 
@@ -59,6 +61,9 @@ class _CodePageState extends State<CodePage> {
                               .getTextSize(TextSizeKey.titleSize)),
                 ),
                 onTap: () {
+                  RoutesUtil.navigateToPage(context,MAIN_PAGE,
+                      {NavigatorKey.keyMainPage: ''});
+                  return;
                   if(_codeController.text.isNotEmpty){
                     context.read<LoadingModel>().show();
                     LoginStore.login(widget.arguments[NavigatorKey.keyEmail], _codeController.text).then((value){

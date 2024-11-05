@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import '../config/routes.dart';
 
 class RoutesUtil {
-  static void navigateToCode(BuildContext context, Map<String, dynamic> params) {
+  static void navigateToPage(BuildContext context, String pageName, Map<String, dynamic> params) {
     Navigator.of(context).pushNamed(
-      CODE_PAGE,
+      pageName,
       arguments: params,
     );
   }
+
 }

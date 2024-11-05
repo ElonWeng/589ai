@@ -10,6 +10,7 @@ import 'package:runtool/ui/login/code_page.dart';
 import 'package:runtool/ui/login/login_model.dart';
 import 'package:runtool/ui/login/login_page.dart';
 import 'package:runtool/ui/login/splash_page.dart';
+import 'package:runtool/ui/main_page.dart';
 
 import 'base/config/routes.dart';
 import 'base/model/local_model.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           CODE_PAGE: (context) => CodePage(arguments: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
+          MAIN_PAGE: (context) => MainPage(arguments: ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>),
         },
         home: const BaseProviderWidget(
           child: LoginPage(),
